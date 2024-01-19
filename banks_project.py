@@ -82,20 +82,17 @@ def run_query(query_statement, sql_connection):
     return result
 
 
-if __name__ == '__main__':
-    url = 'https://web.archive.org/web/20230908091635/https://en.wikipedia.org/wiki/List_of_largest_banks'
-    output_csv_path = './Largest_banks_data.csv'
-    database_name = 'Banks.db'
-    table_name = 'Largest_banks'
-    #
-    log_progress('Preliminaries complete. Initiating ETL process')
-    #
+url = 'https://web.archive.org/web/20230908091635/https://en.wikipedia.org/wiki/List_of_largest_banks'
+output_csv_path = './Largest_banks_data.csv'
+database_name = 'Banks.db'
+table_name = 'Largest_banks'
+#
+log_progress('Preliminaries complete. Initiating ETL process')
+#
 
-    df = ic(extract(url, 'By market capitalization'))
-
-    transform(df, 'exchange_rate.csv')
-
-    load_to_csv(df, output_csv_path)
+df = ic(extract(url, 'By market capitalization'))
+transform(df, 'exchange_rate.csv')
+load_to_csv(df, output_csv_path)
 
     with sqlite3.connect(database_name) as conn:
         load_to_db(df, conn, table_name)
